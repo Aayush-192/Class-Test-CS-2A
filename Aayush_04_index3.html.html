@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start-Assessment</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #7c4abe;
+            font-family: Arial, sans-serif;
+        }
+
+        .dialog {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            min-width: 300px;
+        }
+
+        .inpnum {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #E0E0E0;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #00C853;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            float: right;
+            cursor: pointer;
+            font-size: 14px;
+            transition: opacity 0.3s;
+        }
+
+        #bulbContainer {
+            display: none;
+        }
+
+        .control-panel {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .bulb-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bulb {
+            width: 60px;
+            height: 60px;
+            background-image: url('/Class-Test-CS-2A/Aayush_04/Light_Bulb_PNG_Clip_Art-2102.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: 0.3s;
+        }
+
+        .bulb.on {
+            background-image: url('/Class-Test-CS-2A/Aayush_04/Yellow_Light_Bulb_PNG_Clip_Art-2108.png');
+        }
+
+        .switch {
+            width: 40px;
+            height: 20px;
+            background-color: #ff0000;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .switch.on {
+            background-color: #00C853;
+        }
+
+        .reset-button {
+            background-color: #E0E0E0;
+            color: black;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dialog" id="inputContainer">
+        <h2>Custom Lighting</h2>
+        <input type="number" min="1" max="4" placeholder="Enter the Number of Bulbs" class="inpnum" id="bulbInput">
+        <button onclick="createBulbs()">Done</button>
+    </div>
+
+    <div class="dialog" id="bulbContainer">
+        <div class="control-panel" id="bulbPanel">
+        </div>
+        <button class="reset-button" onclick="resetBulbs()">Reset</button>
+    </div>
+
+    <script>
+        let bulbStates = [];
+
+        function createBulbs() {
+            const numBulbs = parseInt(document.getElementById('bulbInput').value);
+            if (numBulbs < 1 || numBulbs > 4 || isNaN(numBulbs)) {
+                alert('Please enter a number between 1 and 4');
+                return;
+            }
+
+            document.getElementById('inputContainer').style.display = 'none';
+            document.getElementById('bulbContainer').style.display = 'block';
+
+            bulbStates = new Array(numBulbs).fill(false);
+            const bulbPanel = document.getElementById('bulbPanel');
+            bulbPanel.innerHTML = '';
+            
+            for (let i = 0; i < numBulbs; i++) {
+                const bulbContainer = document.createElement('div');
+                bulbContainer.className = 'bulb-container';
+                
+                const bulb = document.createElement('div');
+                bulb.className = 'bulb';
+                
+                const switchButton = document.createElement('div');
+                switchButton.className = 'switch';
+                switchButton.onclick = () => toggleBulb(i);
+                
+                bulbContainer.appendChild(bulb);
+                bulbContainer.appendChild(switchButton);
+                bulbPanel.appendChild(bulbContainer);
+            }
+        }
+
+        function toggleBulb(index) {
+            bulbStates[index] = !bulbStates[index];
+            updateDisplay();
+        }
+
+        function resetBulbs() {
+            bulbStates.fill(false);
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const bulbs = document.querySelectorAll('.bulb');
+            const switches = document.querySelectorAll('.switch');
+            
+            bulbStates.forEach((state, index) => {
+                if (state) {
+                    bulbs[index].classList.add('on');
+                    switches[index].classList.add('on');
+                } else {
+                    bulbs[index].classList.remove('on');
+                    switches[index].classList.remove('on');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
